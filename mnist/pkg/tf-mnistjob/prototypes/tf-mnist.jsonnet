@@ -1,5 +1,5 @@
 // @apiVersion 0.1
-// @name io.ksonnet.pkg.tf-mnist
+// @name io.ksonnet.pkg.tf-mnistjob
 // @description A TensorFlow Mnist job
 // @shortDescription Run the TensorFlow Mnist job.
 // @param name string Name for the job.
