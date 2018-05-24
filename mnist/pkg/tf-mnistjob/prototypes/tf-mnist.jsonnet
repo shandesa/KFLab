@@ -19,7 +19,7 @@ local k = import "k.libsonnet";
 local deployment = k.extensions.v1beta1.deployment;
 local container = deployment.mixin.spec.template.spec.containersType;
 local podTemplate = k.extensions.v1beta1.podTemplate;
-local utils = import "kubeflow/tf-job/util.libsonnet";
+local util = ciscoai/tf-mnistjob/util.libsonnet";
 
 // updatedParams uses the environment namespace if
 // the namespace parameter is not explicitly set
@@ -44,7 +44,7 @@ local envs =
   if envsParam == "null" then
     []
   else
-    utils.nameValuePair(std.split(envsParam,","));
+    util.nameValuePair(std.split(envsParam,","));
 
 
 
