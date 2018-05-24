@@ -19,7 +19,7 @@ local k = import "k.libsonnet";
 local deployment = k.extensions.v1beta1.deployment;
 local container = deployment.mixin.spec.template.spec.containersType;
 local podTemplate = k.extensions.v1beta1.podTemplate;
-local util = "ciscoai/tf-mnistjob/util.libsonnet";
+local util = import "ciscoai/tf-mnistjob/util.libsonnet";
 
 // updatedParams uses the environment namespace if
 // the namespace parameter is not explicitly set
