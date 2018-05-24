@@ -7,3 +7,6 @@ libraries:
   nfs-volume:
     version: master
     path: nfs-volume
+  tf-mnistjob:
+    version: master
+    path: tf-mnistjob
