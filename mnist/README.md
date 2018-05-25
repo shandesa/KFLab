@@ -51,7 +51,7 @@ If above commands succeeds, you are good to go !
  2. Create namespace if not present
 
     
-       kubectl create namespace ${NAMESPACE}
+        kubectl create namespace ${NAMESPACE}
     
 
 3. Initialize the ksonnet app and create ksonnet environment. Environment makes it easy to manage app versions(Say dev, prod, test)
