@@ -94,7 +94,7 @@ If above commands succeeds, you are good to go !
 
  7.  Deploy NFS server in the k8s cluster **(Optional step)**
              
-     If you have already setup a NFS server, you can skip this step and proceed to step 8. 
+     If you have already setup a NFS server, you can skip this step and proceed to step 8. Set `NFS_SERVER_IP`to ip of your NFS server 
      
        
          ks generate nfs-server nfs-server
