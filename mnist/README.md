@@ -46,6 +46,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 
 2. Run the training job setup script
+
        ./train.bash
 
 3. Start TF serving on the trained results
