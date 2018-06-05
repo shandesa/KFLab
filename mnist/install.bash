@@ -21,8 +21,8 @@ ks env set ${KF_ENV} --namespace ${NAMESPACE}
 ## Public registry that contains the official kubeflow components
 ks registry add kubeflow github.com/kubeflow/kubeflow/tree/${KUBEFLOW_GITHUB_VERSION}/kubeflow
 
-## Private registry that contains mnist example components
-ks registry add ciscoai github.com/CiscoAI/kubeflow-examples/tree/${CISCOAI_GITHUB_VERSION}/mnist/pkg
+## Private registry that contains ${APP_NAME} example components
+ks registry add ciscoai github.com/CiscoAI/kubeflow-examples/tree/${CISCOAI_GITHUB_VERSION}/${APP_NAME}/pkg
 
 #5. Install necessary packages from registries
 
@@ -32,7 +32,7 @@ ks pkg install kubeflow/tf-job@${KUBEFLOW_GITHUB_VERSION}
 
 ks pkg install ciscoai/nfs-server@${CISCOAI_GITHUB_VERSION}
 ks pkg install ciscoai/nfs-volume@${CISCOAI_GITHUB_VERSION}
-ks pkg install ciscoai/tf-mnistjob@${CISCOAI_GITHUB_VERSION}
+ks pkg install ciscoai/tf-${APP_NAME}job@${CISCOAI_GITHUB_VERSION}
 
 #6. Deploy kubeflow core components to K8s cluster.
 

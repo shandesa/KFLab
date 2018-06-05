@@ -5,12 +5,11 @@ set -x
 trap read debug
 
 # Start the training job
-APP=mnist
 
 # read common variables (between installation, training, and serving)
 source variables.bash
 
-cd ${APP}
+cd ${APP_NAME}
 pwd
 
 # Set training job specific environment variables in `envs` variable(comma
@@ -18,7 +17,7 @@ pwd
 # training job when created.
 ENV="TF_DATA_DIR=$TF_DATA_DIR,TF_EXPORT_DIR=$TF_EXPORT_DIR,TF_MODEL_DIR=$TF_MODEL_DIR"
 
-JOB=tf-${APP}job
+JOB=tf-${APP_NAME}job
 ks generate ${JOB} ${JOB}
 
 # Set tf training job specific environment params
