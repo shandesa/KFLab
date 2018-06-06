@@ -92,23 +92,23 @@ If above commands succeeds, you are good to go !
         ks apply ${KF_ENV} -c kubeflow-core
     
 
- 7.  Deploy NFS server in the k8s cluster **(Optional step)**
+ 7.  Deploy NFS server using Google Cloud launcher **(Optional step)**
              
-     If you have already setup a NFS server, you can skip this step and proceed to step 8. Set `NFS_SERVER_IP`to ip of your NFS server 
+     If you have already setup a NFS server, you can skip this step and proceed to step 8. Set `NFS_SERVER_IP`to ip of your NFS server. 
      
+     Deploy NFS server at https://console.cloud.google.com/launcher/details/click-to-deploy-images/singlefs
+
        
-         ks generate nfs-server nfs-server
-         ks apply ${KF_ENV} -c nfs-server
   
 
 8.   Deploy NFS PV/PVC in the k8s cluster **(Optional step)**
 
      If you have already created NFS PersistentVolume and PersistentVolumeClaim, you can skip this step and proceed to step 9.  
    
-  
-         NFS_SERVER_IP=`kubectl -n ${NAMESPACE} get svc/nfs-server  --output=jsonpath={.spec.clusterIP}`
-         
-         ks generate nfs-volume nfs-volume  --name=${NFS_PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP}
+         #Replace with your `nfs-server-name` and `nfs-server-zone-name` to get the `NFS_SERVER_IP`
+         NFS_SERVER_IP=`gcloud compute instances describe <nfs-server-name> --zone=<nfs-server-zone-name> --format='value(networkInterfaces[0].networkIP)'`
+
+         ks generate nfs-volume nfs-volume  --name=${NFS_PVC_NAME}  --nfs_server_ip=${NFS_SERVER_IP} --mountpath=/data
          ks apply ${KF_ENV} -c nfs-volume
 
 
@@ -146,7 +146,7 @@ If above commands succeeds, you are good to go !
        TF_EXPORT_DIR=${NFS_MODEL_PATH}
     
        #Concatenate key-value pairs into a env variable
-       ENV="TF_DATA_DIR=$TF_DATA_DIR,TF_EXPORT_DIR=$TF_EXPORT_DIR,TF_MODEL_DIR=$TF_MODEL_DIR"
+       ENV="TF_DATA_DIR=$TF_DATA_DIR,TF_EXPORT_DIR=$TF_EXPORT_DIR,TF_MODEL_DIR=$TF_MODEL_DIR”
 
        ks generate tf-mnistjob tfmnistjob
 
