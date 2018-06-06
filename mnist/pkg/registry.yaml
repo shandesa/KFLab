@@ -7,6 +7,9 @@ libraries:
   nfs-volume:
     version: master
     path: nfs-volume
+  gke-volume:
+    version: master
+    path: gke-volume
   tf-mnistjob:
     version: master
     path: tf-mnistjob

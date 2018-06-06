@@ -1,8 +1,8 @@
 { 
-   "name": "nfs-volume",
+   "name": "gke-volume",
    "apiVersion": "0.0.1",
    "kind": "ksonnet.io/parts",
-   "description": "Prototype for creating a NFS persistent volume claim\n",
+   "description": "Prototype for creating a GKE persistent volume claim using storage class\n",
    "author": "Johnu George <johnugeo@cisco.com>",
    "contributors": [
       {
@@ -23,13 +23,13 @@
       "database"
    ],
    "quickStart": {
-      "prototype": "io.ksonnet.pkg.nfs-volume",
-      "componentName": "nfs-volume",
+      "prototype": "io.ksonnet.pkg.gke-volume",
+      "componentName": "gke-volume",
       "flags": {
-         "name": "nfs-volume",
+         "name": "gke-volume",
          "namespace": "default"
       },
-      "comment": "Create NFS volume"
+      "comment": "Create GKE PVC"
    },
    "license": "Apache 2.0"
 }
