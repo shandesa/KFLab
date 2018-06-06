@@ -1,4 +1,4 @@
-This tutorial contains instructions to build an **end to end kubeflow app** on a native Kubernetes cluster(non-cloud) with minimal prerequisites.  The mnist model is trained and served from a NFS mount.  This example is intended for beginners with zero/minimal experience in kubeflow.
+This tutorial contains instructions to build an **end to end kubeflow app** on a GKE cluster with minimal prerequisites.  The mnist model is trained and served from a NFS mount.  This example is intended for beginners with zero/minimal experience in kubeflow.
 
 This tutorial demonstrates 
 
@@ -10,7 +10,7 @@ This tutorial demonstrates
 
 1. **kubectl cli**
 
-   Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
+   Check if kubectl  is configured properly by accessing the cluster Info of your GKE cluster
           
        $kubectl cluster-info 
              
