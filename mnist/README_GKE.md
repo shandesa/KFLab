@@ -8,19 +8,24 @@ This tutorial demonstrates
 
 # Prerequisites
 
-1. **kubectl cli**
+ 1. **GKE Cluster Requirements**
+      
+     All nodes of GKE cluster must have `Ubuntu` node image. Masters and slaves are recommended to have latest k8s version.
 
-   Check if kubectl  is configured properly by accessing the cluster Info of your GKE cluster
+
+ 2. **kubectl cli**
+
+     Check if kubectl  is configured properly by accessing the cluster Info of your GKE cluster
           
-       $kubectl cluster-info 
+        $kubectl cluster-info 
              
                        
- 2. **Ksonnet**(Latest version:version: 0.10.2)
+ 3. **Ksonnet**(Latest version:version: 0.10.2)
  
-    Check ksonnet version
+      Check ksonnet version
     
-        $ ks version
-
+        $ks version
+ 
 
 If above commands succeeds, you are good to go !
 
