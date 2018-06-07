@@ -6,6 +6,7 @@
 // @param nfs_server_ip string Cluster Ip address of nfs-server service
 // @optionalParam namespace string null Namespace to use for the components
 // @optionalParam capacity string 1Gi Total capacity of the NFS persistent volume
+// @optionalParam mountpath string / NFS mount point
 // @optionalParam storage_request string 1Gi Total storage requested from the persistent volume
 
 
@@ -25,10 +26,11 @@ local namespace = updatedParams.namespace;
 
 local nfs_server_ip = import "param://nfs_server_ip";
 local capacity = import "param://capacity";
+local path = import "param://mountpath";
 local storage_request = import "param://storage_request";
 
 std.prune(k.core.v1.list.new([
-  nfs.parts.nfsPV(name, namespace, nfs_server_ip, capacity),
+  nfs.parts.nfsPV(name, namespace, nfs_server_ip, capacity, path),
   nfs.parts.nfsPVC(name, namespace, storage_request)
 ]))
 

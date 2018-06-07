@@ -37,7 +37,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 # Setup
 1. Create the mnist training Image and upload to DockerHub
 
-   Point `DOCKER_BASE_URL` to your DockerHub account. If you don't have a DockerHub account, create one. 
+   Point `DOCKER_BASE_URL` to your DockerHub account. If you don't have a DockerHub account, create one.
 
        DOCKER_BASE_URL=docker.io/johnugeorge
        IMAGE=${DOCKER_BASE_URL}/tfmodel
@@ -50,26 +50,28 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
        ./train.bash
 
 3. Start TF serving on the trained results
-    
-    Note that `tfserving's modelPath` is set to `tfmnistjob's TF_EXPORT_DIR` so that tf serving pod automatically picks up the training results when training is completed.
-    
+
+    Note that `tfserving's modelPath` is set to `tfmnistjob's TF_EXPORT_DIR` so
+    that tf serving pod automatically picks up the training results when
+    training is completed.
+
 
        ks generate tf-serving tfserving --name=mnist
-    
-       #Set tf serving job specific environment params
+
+       # Set tf serving job specific environment params
        ks param set tfserving modelPath ${NFS_MODEL_PATH}
        ks param set tfserving modelStorageType nfs
        ks param set tfserving nfsPVC ${NFS_PVC_NAME}
 
-       #Deploy and start serving
+       # Deploy and start serving
        ks apply ${KF_ENV} -c tfserving
-    
+
 
 5. Port forward to access the serving port locally
 
 
        SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
-    
+
        kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000 &
 
 
@@ -77,16 +79,16 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 
        virtualenv --system-site-packages env
-       source ./env/bin/activate 
+       source ./env/bin/activate
        easy_install -U pip
        pip install --upgrade tensorflow
        pip install tensorflow-serving-api
        pip install python-mnist
-    
+
        TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
-    
+
  You should see the following result
- 
+
       Your model says the above number is... 7!
- 
+
  Now try a different image in `data` directory :)

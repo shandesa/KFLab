@@ -2,7 +2,7 @@ local k = import "k.libsonnet";
 
 {
  parts:: {
-    nfsPV(name, namespace, serverip, capacity) :: {
+    nfsPV(name, namespace, serverip, capacity, path) :: {
         apiVersion: "v1",
         kind: "PersistentVolume",
         metadata: {
@@ -16,7 +16,7 @@ local k = import "k.libsonnet";
             accessModes: [ "ReadWriteMany" ],   
             nfs: {
                 server: serverip,
-                path: "/",
+                path: path,
             } 
         }
     },

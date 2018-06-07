@@ -29,7 +29,7 @@
          "name": "nfs-volume",
          "namespace": "default"
       },
-      "comment": "Create NFS server"
+      "comment": "Create NFS volume"
    },
    "license": "Apache 2.0"
 }
