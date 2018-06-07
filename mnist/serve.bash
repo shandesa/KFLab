@@ -7,9 +7,17 @@ trap read debug
 
 # Start TF serving on the trained results
 
-Note that `tfserving's modelPath` is set to `tfmnistjob's TF_EXPORT_DIR` so
-that tf serving pod automatically picks up the training results when
-training is completed.
+# Note that `tfserving's modelPath` is set to `tfmnistjob's TF_EXPORT_DIR` so
+# that tf serving pod automatically picks up the training results when training
+# is completed.
+
+# Read variables
+source variables.bash
+
+cd ${APP_NAME}
+pwd
+
+#2. Create namespace if not present
 
 ks generate tf-serving tfserving --name=${APP_NAME}
 
