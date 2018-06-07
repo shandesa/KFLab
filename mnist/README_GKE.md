@@ -196,6 +196,7 @@ If above commands succeeds, you are good to go !
        pip install --upgrade tensorflow
        pip install tensorflow-serving-api
        pip install python-mnist
+       pip install Pillow
     
        TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
     
