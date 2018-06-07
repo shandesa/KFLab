@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Uncomment the following two lines to step through each command and to print
 # the command being executed.
 set -x
