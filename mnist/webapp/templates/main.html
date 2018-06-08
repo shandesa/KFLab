@@ -24,7 +24,7 @@
             <div style="width: 750px; display: table;">
                 <div style="display: table-row">
                     <div style="display: table-cell;" v-for="image in imagelist" :key="image">
-                        <img @click="call_inference(image)" :src="image"/>
+                        <img @click="call_inference(image)" :src="image" class="img"/>
                     </div>
                 </div>
             </div>
