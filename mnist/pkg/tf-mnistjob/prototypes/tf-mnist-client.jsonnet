@@ -3,9 +3,10 @@
 // @description A TensorFlow Mnist client
 // @shortDescription Run the TensorFlow Mnist client
 // @param name string Name for the mnist client.
-// @param serving_pod_ip string IP of the serving pod
+// @param mnist_serving_ip string IP of the serving pod
 // @param image string Image of the mnist client
-// @optionalParam serving_pod_port string 9000 Port of the serving pod
+// @optionalParam mnist_serving_port string 9000 Port of the serving pod
+// @optionalParam lbip string null client external loadbalancer ip
 // @optionalParam replicas string 1 Number of client replica deployment
 // @optionalParam namespace string null Namespace to use for the components. It is automatically inherited from the environment if not set.
 
@@ -21,8 +22,14 @@ local updatedParams = params {
 local name = import "param://name";
 local namespace = updatedParams.namespace;
 local replicas = import "param://replicas";
-local host = import "param://serving_pod_ip";
-local port = import "param://serving_pod_port";
+local host = import "param://mnist_serving_ip";
+local port = import "param://mnist_serving_port";
+local lbip = import "param://lbip";
+local lb = 
+  if lbip == "null" then
+    ""
+  else
+    lbip;
 
 local image = import "param://image";
 
@@ -98,6 +105,7 @@ local service = {
    },
    "spec": {
       "type": "LoadBalancer",
+      "loadBalancerIP": lb,
       "ports": [
          {
             "port": 80,
