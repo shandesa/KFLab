@@ -6,6 +6,7 @@
 // @param serving_pod_ip string IP of the serving pod
 // @param image string Image of the mnist client
 // @optionalParam serving_pod_port string 9000 Port of the serving pod
+// @optionalParam replicas string 1 Number of client replica deployment
 // @optionalParam namespace string null Namespace to use for the components. It is automatically inherited from the environment if not set.
 
 local k = import "k.libsonnet";
@@ -19,6 +20,7 @@ local updatedParams = params {
 
 local name = import "param://name";
 local namespace = updatedParams.namespace;
+local replicas = import "param://replicas";
 local host = import "param://serving_pod_ip";
 local port = import "param://serving_pod_port";
 
@@ -35,6 +37,7 @@ local deployment = {
       }
    },
    "spec": {
+      "replicas" : replicas,
       "selector": {
          "matchLabels": {
             "app": "mnist-client"
@@ -63,9 +66,19 @@ local deployment = {
                   ],
                   "ports": [
                      {
-                        "containerPort": 5000
+                        "containerPort": 80
                      }
-                  ]
+                  ],
+                  "resources": {
+                        "requests": {
+                            "memory": "1Gi",
+                            "cpu": "1",
+                                    },
+                        "limits": {
+                            "memory": "4Gi",
+                            "cpu": "4",
+                         },
+                    },
                }
             ]
          }
@@ -88,7 +101,7 @@ local service = {
       "ports": [
          {
             "port": 80,
-            targetPort: 5000
+            targetPort: 80
          }
       ],
       "selector": {

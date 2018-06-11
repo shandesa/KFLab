@@ -3,3 +3,4 @@ tensorflow
 tensorflow-serving-api
 python-mnist
 Pillow
+gunicorn

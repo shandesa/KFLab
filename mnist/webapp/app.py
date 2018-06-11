@@ -1,6 +1,8 @@
 import os
 import random
 import numpy
+import logging
+import sys
 
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
@@ -13,6 +15,9 @@ from mnist import MNIST
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__,static_url_path='/static', static_folder='static')
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
+
 TF_MODEL_SERVER_HOST = os.getenv("TF_MODEL_SERVER_HOST", "127.0.0.1")
 TF_MODEL_SERVER_PORT = int(os.getenv("TF_MODEL_SERVER_PORT", 9000))
 
@@ -28,7 +33,7 @@ def predict():
         # get url
         image_url = request.form.get('img')
         image_name = image_url
-        print image_name
+        app.logger.debug(image_name)
         raw_image = Image.open(image_name)
         int_image = numpy.array(raw_image)
         image = numpy.reshape(int_image, 784).astype(numpy.float32)
@@ -43,7 +48,7 @@ def predict():
         result = stub.Predict(request, 10.0)  # 10 secs timeout
         #print(result)
         #print(MNIST.display(image, threshold=0))
-        print("Your model says the above number is... %d!" % result.outputs["classes"].int_val[0])
+        app.logger.debug("Your model says the above number is... %d!" % result.outputs["classes"].int_val[0])
         return str(result.outputs["classes"].int_val[0])
         #return "1"
 
