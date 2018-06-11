@@ -3,7 +3,7 @@
 // @description A TensorFlow Mnist client
 // @shortDescription Run the TensorFlow Mnist client
 // @param name string Name for the mnist client.
-// @param mnist_serving_ip string IP of the serving pod
+// @param mnist_serving_ip string IP of the serving service
 // @param image string Image of the mnist client
 // @optionalParam mnist_serving_port string 9000 Port of the serving pod
 // @optionalParam lbip string null client external loadbalancer ip
@@ -44,7 +44,7 @@ local deployment = {
       }
    },
    "spec": {
-      "replicas" : replicas,
+      "replicas" : std.parseInt(replicas),
       "selector": {
          "matchLabels": {
             "app": "mnist-client"
