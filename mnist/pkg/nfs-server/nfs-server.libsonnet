@@ -13,9 +13,6 @@ local k = import "k.libsonnet";
         },
       },
       spec: {
-        selector: {
-            role: "nfs-server"
-        },   
         template: {
           metadata: {
             labels: {
