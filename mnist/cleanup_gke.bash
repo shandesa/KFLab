@@ -18,4 +18,4 @@ ks delete ${KF_ENV} -c kubeflow-core
 kubectl get pods -n ${NAMESPACE}
 
 ks env rm ${KF_ENV}
-kubectl delete namespace kubeflow
+kubectl delete namespace ${NAMESPACE} 
