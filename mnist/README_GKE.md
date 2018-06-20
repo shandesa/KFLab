@@ -20,7 +20,7 @@ This tutorial demonstrates
         $kubectl cluster-info 
              
                        
- 3. **Ksonnet**(Latest version:version: 0.10.2)
+ 3. **Ksonnet**(Latest version:version: 0.11.0)
  
       Check ksonnet version
     
