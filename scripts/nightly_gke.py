@@ -371,8 +371,8 @@ if __name__ == "__main__":
   create_gcloud_cluster(args.project, args.zone)
   get_cluster_info()
   logging.info(args)
-  repo_dir = clone_repo("nightly_repo")
-  #repo_dir = args.repo 
+  #repo_dir = clone_repo("nightly_repo")
+  repo_dir = args.repo 
   app = args.app
   os.chdir(repo_dir + "/" + app)
   run(["ls"])
