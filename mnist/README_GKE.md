@@ -57,9 +57,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 5. [TBD] Port forward to access the serving port locally
 
-       SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
-
-       kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000 &
+       ./portf.bash
 
 # Test
 6. [TBD] Run a sample client code to predict images(See mnist-client.py)
