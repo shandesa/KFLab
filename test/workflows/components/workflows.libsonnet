@@ -51,8 +51,8 @@
       local goDir = testDir + "/go";
       // Source directory where all repos should be checked out
       local srcRootDir = testDir + "/src";
-      // The directory containing the kubeflow/pytorch-operator repo
-      local srcDir = srcRootDir + "/kubeflow/pytorch-operator";
+      // The directory containing the ciscoai/kubeflow-workflows repo
+      local srcDir = srcRootDir + "/ciscoai/kubeflow-workflows";
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
       local golangImage = "golang:1.9.4-stretch";
       local helmImage = "volumecontroller/golang:1.9.2";
@@ -64,14 +64,14 @@
       local versionTag = if params.versionTag != null then
         params.versionTag
         else name;
-      local pytorchJobImage = params.registry + "/pytorch_operator:" + versionTag;
+      //local pytorchJobImage = params.registry + "/pytorch_operator:" + versionTag;
 
       // The namespace on the cluster we spin up to deploy into.
       local deployNamespace = "kubeflow";
       // The directory within the kubeflow_testing submodule containing
       // py scripts to use.
       local k8sPy = srcDir;
-      local kubeflowPy = srcRootDir + "/kubeflow/testing/py";
+      local kubeflowPy = srcRootDir + "/ciscoai/ai-test-infra/py";
 
       local project = params.project;
       // GKE cluster to use
