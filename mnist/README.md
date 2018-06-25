@@ -67,7 +67,9 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
        ks apply ${KF_ENV} -c tfserving
 
 
-Model Testing
+# Model Testing
+
+The model can be tested using a local python client or via web application
 
 1. Using a local python client 
 
