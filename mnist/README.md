@@ -99,8 +99,8 @@ Model Testing
 
 2. Using a web application
 
-      MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
-      echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
+       MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
+       echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
  Create image using Dockerfile in the webapp folder and upload to DockerHub
      
@@ -117,4 +117,4 @@ Model Testing
  
       kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
-  Open browser and see app at http://<LoadBalancerIP>  
+  Open browser and see app at http://LoadBalancerIP 
