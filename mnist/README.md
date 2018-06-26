@@ -1,9 +1,3 @@
----
-title: "Dummy"
-output:
-  html_document:
-    number_sections: true
----
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 native Kubernetes cluster(non-cloud) with minimal prerequisites.  The mnist
