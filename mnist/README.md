@@ -1,3 +1,4 @@
+# Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
 native Kubernetes cluster(non-cloud) with minimal prerequisites.  The mnist
 model is trained and served from a NFS mount.  This example is intended for
@@ -9,8 +10,16 @@ This tutorial demonstrates:
 * Export the trained Tensorflow model and serve using tensorflow-model-server
 * Test/Predict images with a python client(*See mnist_client.py*)
 
-# Overview of the application
 ![Generic Schematic](pictures/generic_schematic.png?raw=true "Generic Schematic of MNIST application")
+This picture shows the overall schematic without any Google Kubernetes Engine
+specifics. After the `install` step, the MNIST images are downloaded (from
+inside the code) to the `train` stage. The `train` stage keeps updating the
+parameters in the `persistent parameter storage`, a storage that persists even
+if the containers and the clusters go down. The `client` app sends an image to
+the `serve` stage that in turn retrieves the parameters from the `persistent
+parameter storage` and uses these parameters to predict the image and send
+the response back to the `client`.
+
 ![Google Kubernetes Engine Schematic](pictures/gke_schematic.png?raw=true "GKE Schematic of MNIST application")
 
 # Prerequisites
