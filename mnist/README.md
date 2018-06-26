@@ -9,6 +9,10 @@ This tutorial demonstrates:
 * Export the trained Tensorflow model and serve using tensorflow-model-server
 * Test/Predict images with a python client(*See mnist_client.py*)
 
+# Overview of the application
+![Generic Schematic](pictures/generic_schematic.png?raw=true "Generic Schematic of MNIST application")
+![Google Kubernetes Engine Schematic](pictures/gke_schematic.png?raw=true "GKE Schematic of MNIST application")
+
 # Prerequisites
 
 1. **kubectl cli**
@@ -51,13 +55,13 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 3. Start TF serving on the trained results
 
-       ./serve.bash   
+       ./serve.bash
 
 # Model Testing
 
 The model can be tested using a local python client or via web application
 
-1. Using a local python client 
+## Using a local python client
 
  Port forward to access the serving port locally
 
@@ -85,7 +89,7 @@ The model can be tested using a local python client or via web application
 
  Now try a different image in `data` directory :)
 
-2. Using a web application
+## Using a web application
 
        MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
        echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
