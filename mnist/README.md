@@ -10,6 +10,7 @@ This tutorial demonstrates:
 * Export the trained Tensorflow model and serve using tensorflow-model-server
 * Test/Predict images with a python client(*See mnist_client.py*)
 
+## Overall Structure
 ![Generic Schematic](pictures/generic_schematic.png?raw=true "Generic Schematic of MNIST application")
 This picture shows the overall schematic without any Google Kubernetes Engine
 specifics. After the `install` step, the MNIST images are downloaded (from
@@ -20,7 +21,18 @@ the `serve` stage that in turn retrieves the parameters from the `persistent
 parameter storage` and uses these parameters to predict the image and send
 the response back to the `client`.
 
+## GKE Specific Structure
 ![Google Kubernetes Engine Schematic](pictures/gke_schematic.png?raw=true "GKE Schematic of MNIST application")
+The exact implementation on GKE looks somewhat like the above image. There are
+multiple `tf-worker`, `tf-master`, and `tf-ps` (parameter server) pods that form
+the `train` stage.
+The exact number of replicas for each pod is outside the scope of this document and
+_is a hyperparameter to be played with in order to scale this application_.
+The parameter are then stored on an `NFS` persistent volume. Finally, multiple
+`tf-serve` pods implement the `serve` stage. The `Browser/App` (outside the
+logical GKE cluster where the `train` and `serve` stages run) connects with the
+`serve` stage to get a prediction of an image.
+
 
 # Prerequisites
 
