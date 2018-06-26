@@ -2,8 +2,8 @@
 
 # Uncomment the following two lines to step through each command and to print
 # the command being executed.
-set -x
-trap read debug
+#set -x
+#trap read debug
 
 #1. Read variables
 source variables.bash
@@ -41,6 +41,8 @@ ks pkg install ciscoai/tf-${APP_NAME}job@${CISCOAI_GITHUB_VERSION}
 # kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=<your@email.com>
 
 ks generate kubeflow-core kubeflow-core
+ks param set kubeflow-core tfJobImage "gcr.io/kubeflow-images-public/tf_operator:v20180522-77375baf"
+ks param set kubeflow-core tfJobVersion v1alpha1
 ks apply ${KF_ENV} -c kubeflow-core
 
 #7. Deploy NFS server in the k8s cluster **(Optional step)**

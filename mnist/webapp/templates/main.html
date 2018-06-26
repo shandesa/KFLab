@@ -48,8 +48,8 @@
                 </tr>
             </table>
         </div>
-        <script src="https://unpkg.com/vue"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="{{ url_for('static', filename='js/vue.min.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='js/axios.min.js') }}" type="text/javascript"></script>
         <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
     </body>
 </html>

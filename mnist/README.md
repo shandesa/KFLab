@@ -17,7 +17,7 @@ This tutorial demonstrates:
 
        $kubectl cluster-info
 
- 2. **Ksonnet**(Latest version:version: 0.10.2)
+ 2. **Ksonnet**(Latest version:version: 0.11.0)
 
     Check ksonnet version
 
@@ -51,23 +51,15 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 3. Start TF serving on the trained results
 
-    Note that `tfserving's modelPath` is set to `tfmnistjob's TF_EXPORT_DIR` so
-    that tf serving pod automatically picks up the training results when
-    training is completed.
+       ./serve.bash   
 
+# Model Testing
 
-       ks generate tf-serving tfserving --name=mnist
+The model can be tested using a local python client or via web application
 
-       # Set tf serving job specific environment params
-       ks param set tfserving modelPath ${NFS_MODEL_PATH}
-       ks param set tfserving modelStorageType nfs
-       ks param set tfserving nfsPVC ${NFS_PVC_NAME}
+1. Using a local python client 
 
-       # Deploy and start serving
-       ks apply ${KF_ENV} -c tfserving
-
-
-5. Port forward to access the serving port locally
+ Port forward to access the serving port locally
 
 
        SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
@@ -75,7 +67,7 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
        kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000 &
 
 
-6. Run a sample client code to predict images(See mnist-client.py)
+ Run a sample client code to predict images(See mnist-client.py)
 
 
        virtualenv --system-site-packages env
@@ -92,3 +84,25 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
       Your model says the above number is... 7!
 
  Now try a different image in `data` directory :)
+
+2. Using a web application
+
+       MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
+       echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
+
+ Create image using Dockerfile in the webapp folder and upload to DockerHub
+     
+      CLIENT_IMAGE=${DOCKER_BASE_URL}/mnist-client
+      docker build . --no-cache  -f Dockerfile -t ${CLIENT_IMAGE}
+      docker push ${CLIENT_IMAGE}
+
+      echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
+      ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
+
+      ks apply {KF_ENV} -c tf-mnist-client
+ 
+  Now get the loadbalancer IP of the tf-mnist-client service
+ 
+      kubectl get svc/tf-mnist-client -n ${NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+
+  Open browser and see app at http://LoadBalancerIP 

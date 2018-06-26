@@ -2,8 +2,8 @@
 
 # Uncomment the following two lines to step through each command and to print
 # the command being executed.
-set -x
-trap read debug
+#set -x
+#trap read debug
 
 # Start TF serving on the trained results
 
@@ -30,5 +30,5 @@ ks param set tfserving nfsPVC ${NFS_PVC_NAME}
 ks apply ${KF_ENV} -c tfserving
 
 # Port forward to access the serving port locally
-SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
-kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000 &
+#SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
+#kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000 &
