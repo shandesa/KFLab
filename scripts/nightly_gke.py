@@ -368,7 +368,7 @@ if __name__ == "__main__":
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-  create_gcloud_cluster(args.project, args.zone)
+  #create_gcloud_cluster(args.project, args.zone)
   get_cluster_info()
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
@@ -405,7 +405,7 @@ if __name__ == "__main__":
   time.sleep(60)
   rm_data_export(args.project)
   run(["rm","-rf","mnist"])
-  delete_gcloud_cluster(args.zone)
+  #delete_gcloud_cluster(args.zone)
   #os.chdir("../../")
   #file_handler.flush()
   #run(["gsutil","cp",test_log,"gs://cpsg-ai-kubeflow-bucket/nightly_logs/"])
