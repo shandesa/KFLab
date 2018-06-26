@@ -14,6 +14,8 @@ ks delete ${KF_ENV} -c nfs-volume
 kubectl get pv -n ${NAMESPACE}
 kubectl get pvc -n ${NAMESPACE}
 
+ks delete ${KF_ENV} -c nfs-server
+
 ks delete ${KF_ENV} -c kubeflow-core
 kubectl get pods -n ${NAMESPACE}
 
