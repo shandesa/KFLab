@@ -96,7 +96,7 @@ def clone_repo(dest,
     dest: Directory where it was checked out
     sha: The sha of the code.
   """
-  # Clone CiscoAI 
+  # Clone CiscoAI
   repo = "https://github.com/{0}/{1}.git".format(repo_owner, repo_name)
   logging.info("repo %s", repo)
 
@@ -131,45 +131,45 @@ def clone_repo(dest,
 
   return dest
 
-  
+
 def create_gcloud_cluster(project, zone):
-  cmd = "gcloud config set project " + project  
+  cmd = "gcloud config set project " + project
   run(cmd.split())
   cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
   run(cmd.split())
-  cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2" 
+  cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2"
   run(cmd.split())
-  cmd = "gcloud config set container/cluster nightly" 
+  cmd = "gcloud config set container/cluster nightly"
   run(cmd.split())
   cmd = "gcloud container clusters get-credentials nightly --zone "+zone
   run(cmd.split())
   time.sleep(300)
   cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-kubeflow.iam.gserviceaccount.com"
-  run(cmd.split()) 
+  run(cmd.split())
 
 def delete_gcloud_cluster(zone):
-  cmd = "gcloud container clusters delete nightly --zone "+zone+" --quiet" 
-  run(cmd.split()) 
+  cmd = "gcloud container clusters delete nightly --zone "+zone+" --quiet"
+  run(cmd.split())
 
 def check_data_export(project):
   cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
   cmd1 = cmd.split()
   cmd1.append("ls /data/export")
-  run(cmd1) 
+  run(cmd1)
 
 def rm_data_export(project):
   cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
   cmd1 = cmd.split()
   cmd1.append("sudo rm -rf /data/export")
-  run(cmd1) 
+  run(cmd1)
 
 def get_cluster_info():
-  cmd = "kubectl cluster-info" 
-  run(cmd.split()) 
+  cmd = "kubectl cluster-info"
+  run(cmd.split())
 
 def get_pods():
-  cmd = "kubectl get pods -n kubeflow" 
-  run(cmd.split()) 
+  cmd = "kubectl get pods -n kubeflow"
+  run(cmd.split())
 
 def mnist_client():
 
@@ -179,7 +179,7 @@ def mnist_client():
   TF_DATA_DIR = os.getenv("TF_DATA_DIR", "/tmp/data/")
   TF_MNIST_IMAGE_PATH = os.getenv("TF_MNIST_IMAGE_PATH", "data/"+str(num_img)+".png")
   TF_MNIST_TEST_IMAGE_NUMBER = int(os.getenv("TF_MNIST_TEST_IMAGE_NUMBER", -1))
-  
+
   if TF_MNIST_IMAGE_PATH != None:
     raw_image = Image.open(TF_MNIST_IMAGE_PATH)
     int_image = numpy.array(raw_image)
@@ -190,19 +190,19 @@ def mnist_client():
   else:
     test_data_set = input_data.read_data_sets(TF_DATA_DIR, one_hot=True).test
     image = random.choice(test_data_set.images)
-  
+
   channel = implementations.insecure_channel(
       TF_MODEL_SERVER_HOST, TF_MODEL_SERVER_PORT)
   stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
-  
+
   request = predict_pb2.PredictRequest()
   request.model_spec.name = "mnist"
   request.model_spec.signature_name = "serving_default"
   request.inputs['x'].CopyFrom(
       tf.contrib.util.make_tensor_proto(image, shape=[1, 28, 28]))
-  
+
   result = stub.Predict(request, 10.0)  # 10 secs timeout
-  
+
   logging.info(MNIST.display(image, threshold=0))
   logging.info("Your model says the above number is... %d!" %
       result.outputs["classes"].int_val[0])
@@ -220,7 +220,7 @@ def port_forward(app):
   for i in ret.items:
     if((i.metadata.labels.get("app") != None) & (i.metadata.labels.get("app") == app)):
       serving_pod_name = i.metadata.name
-  
+
   cmd = "kubectl -n kubeflow port-forward " + serving_pod_name + " 9000:9000"
   subprocess.Popen(cmd.split())
 
@@ -241,7 +241,7 @@ def check_train_job(app):
   else:
     logging.info("job instances not spawned")
     return 0
-  
+
   time.sleep(200)
 
   cnt = 0
@@ -252,7 +252,7 @@ def check_train_job(app):
   if(cnt == 0):
     logging.info("job instances terminated ")
     return 1
-  else: 
+  else:
     logging.info("job instances NOT terminated ")
     return 0
 
@@ -268,12 +268,12 @@ def check_serve_status(app):
       if(i.status.phase == "Running"):
         logging.info("Ready to serve")
         return 1
-      else: 
+      else:
         logging.info("NOT Ready")
         return 0
-  
+
 def port_forward_start():
-  
+
   devnull = open(os.devnull, 'wb') # Use this in Python < 3.3
   subprocess.Popen(['nohup', './portf.bash'], stdout=devnull, stderr=devnull)
   time.sleep(5)
@@ -328,16 +328,16 @@ if __name__ == "__main__":
     default="n_repo",
     type=str,
     help="The app to run <mnist>/<>")
-  
+
   parser.add_argument(
     "--logpath",
     default="nightly_logs",
     type=str,
     help="The app to run <mnist>/<>")
-  
+
   # Parse the args
   args = parser.parse_args()
-  
+
   # Setup a logging file handler. This way we can upload the log outputs
   # to gubernator.
   root_logger = logging.getLogger()
@@ -362,7 +362,7 @@ if __name__ == "__main__":
                                 datefmt="%Y-%m-%dT%H:%M:%S")
   file_handler.setFormatter(formatter)
   logging.info("Logging to %s", test_log)
-  
+
   final_result = run(["ks", "version"])
   if not final_result:
     # Exit with a non-zero exit code by to signal failure to prow.
@@ -372,36 +372,36 @@ if __name__ == "__main__":
   get_cluster_info()
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
-  repo_dir = args.repo 
+  repo_dir = args.repo
   app = args.app
   os.chdir(repo_dir + "/" + app)
   run(["ls"])
-  final_result = run(["./install_gke.bash"])
+  final_result = run(["./install.bash"])
   if not final_result:
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-    run(["./cleanup_gke.bash"])
+    run(["./cleanup.bash"])
 
   time.sleep(90)
   get_pods()
   run(["./train.bash"])
   ret = check_train_job(app)
   if not ret:
-    run(["./cleanup_gke.bash"])
+    run(["./cleanup.bash"])
     sys.exit(1)
   check_data_export(args.project)
   run(["./serve.bash"])
   time.sleep(30)
   ret = check_serve_status(args.app)
   if not ret:
-    run(["./cleanup_gke.bash"])
+    run(["./cleanup.bash"])
     sys.exit(1)
   port_forward_start()
   time.sleep(5)
-  mnist_client() 
+  mnist_client()
   time.sleep(5)
-  run(["./cleanup_gke.bash"])
+  run(["./cleanup.bash"])
   time.sleep(60)
   rm_data_export(args.project)
   run(["rm","-rf","mnist"])
