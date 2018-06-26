@@ -54,7 +54,7 @@
       // The directory containing the kubeflow/pytorch-operator repo
       local srcDir = srcRootDir + "/nightly_repo";
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
-      local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.0";
+      local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.1";
       local golangImage = "golang:1.9.4-stretch";
       local helmImage = "volumecontroller/golang:1.9.2";
       // The name of the NFS volume claim to use for test files.
@@ -131,20 +131,20 @@
               {
                 name: "DEPLOY_NAMESPACE",
                 value: deployNamespace,
-              },
+              },*/
               {
                 name: "GOOGLE_APPLICATION_CREDENTIALS",
-                value: "/secret/gcp-credentials/key.json",
+                value: "/secret/gcp-credentials/cpsg-ai-kubeflow-f4aaddfc1d5b.json",
               },
               {
-                name: "GIT_TOKEN",
+                name: "GITHUB_TOKEN",
                 valueFrom: {
                   secretKeyRef: {
                     name: "github-token",
-                    key: "github_token",
+                    key: "github-token",
                   },
                 },
-              },*/
+              },
             ], //+ prow_env,
             volumeMounts: [
               {
@@ -172,7 +172,7 @@
         spec: {
           entrypoint: "e2e",
           volumes: [
-            /*{
+            {
               name: "github-token",
               secret: {
                 secretName: "github-token",
@@ -181,9 +181,10 @@
             {
               name: "gcp-credentials",
               secret: {
-                secretName: params.gcpCredentialsSecretName,
+                //secretName: params.gcpCredentialsSecretName,
+                secretName: "gcp-credentials",
               },
-            },*/
+            },
             {
               name: dataVolume,
               persistentVolumeClaim: {
