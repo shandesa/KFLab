@@ -1,5 +1,11 @@
 apiVersion: 0.1.0
 environments:
+  ciscoai-test:
+    destination:
+      namespace: ciscoai-test-infra
+      server: https://35.200.133.81
+    k8sVersion: v1.8.10
+    path: ciscoai-test
   default:
     destination:
       namespace: default
