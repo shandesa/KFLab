@@ -54,7 +54,8 @@
       // The directory containing the ciscoai/kubeflow-workflows repo
       local srcDir = srcRootDir + "/ciscoai/kubeflow-workflows";
       local testWorkerImage = "gcr.io/kubeflow-ci/test-worker";
-      local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.4";
+      local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_worker:0.1"; 
+      //local nightlyImage = "gcr.io/cpsg-ai-kubeflow/nightly_gke:3.4";
       local golangImage = "golang:1.9.4-stretch";
       local helmImage = "volumecontroller/golang:1.9.2";
       // The name of the NFS volume claim to use for test files.
@@ -214,6 +215,10 @@
                   name: "copy-artifacts",
                   template: "copy-artifacts",
                 }],
+                [{
+                  name: "remove-repo",
+                  template: "remove-repo",
+                }],
               ],
             },
             {
@@ -227,7 +232,7 @@
                   name: "EXTRA_REPOS",
                   value: "kubeflow/testing@HEAD",
                 }]*/,
-                image: nightlyImage,
+                image: testWorkerImage,
                 volumeMounts: [
                   {
                     name: dataVolume,
@@ -252,6 +257,23 @@
               "copy_artifacts",
               "--bucket=" + bucket,
             ]),  // copy-artifacts
+            {
+              name: "remove-repo",
+              container: {
+                command: [
+                  "rm",
+                  "-rf",
+                  testDir,
+                ],
+                image: nightlyImage,
+                volumeMounts: [
+                  {
+                    name: dataVolume,
+                    mountPath: mountPath,
+                  },
+                ],
+              },
+            },  // remove repo 
           ],  // templates
         },
       },  // e2e
