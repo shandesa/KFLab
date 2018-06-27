@@ -214,6 +214,10 @@
                   name: "copy-artifacts",
                   template: "copy-artifacts",
                 }],
+                [{
+                  name: "remove-repo",
+                  template: "remove-repo",
+                }],
               ],
             },
             {
@@ -252,6 +256,23 @@
               "copy_artifacts",
               "--bucket=" + bucket,
             ]),  // copy-artifacts
+            {
+              name: "remove-repo",
+              container: {
+                command: [
+                  "rm",
+                  "-rf",
+                  testDir,
+                ],
+                image: nightlyImage,
+                volumeMounts: [
+                  {
+                    name: dataVolume,
+                    mountPath: mountPath,
+                  },
+                ],
+              },
+            },  // remove repo 
           ],  // templates
         },
       },  // e2e
