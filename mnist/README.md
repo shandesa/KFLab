@@ -23,9 +23,9 @@ the response back to the `client`.
 
 ## GKE Specific Structure
 ![Google Kubernetes Engine Schematic](pictures/gke_schematic.png?raw=true "GKE Schematic of MNIST application")
-The exact implementation on GKE looks somewhat like the above image. There are
-multiple `tf-worker`, `tf-master`, and `tf-ps` (parameter server) pods that form
-the `train` stage.
+The exact implementation on GKE looks somewhat like the above image. There is
+one `tf-master` and possibly multiple `tf-worker` and `tf-ps` (parameter server)
+pods that form the `train` stage.
 The exact number of replicas for each pod is outside the scope of this document and
 _is a hyperparameter to be played with in order to scale this application_.
 The parameter are then stored on an `NFS` persistent volume. Finally, multiple
