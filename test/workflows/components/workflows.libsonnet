@@ -232,7 +232,7 @@
                   name: "EXTRA_REPOS",
                   value: "kubeflow/testing@HEAD",
                 }]*/,
-                image: testWorkerImage,
+                image: nightlyImage,
                 volumeMounts: [
                   {
                     name: dataVolume,
@@ -249,7 +249,7 @@
               "--repo=" + srcDir,
               "--logpath=" + outputDir,
             ]),  // run tests
-            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("copy-artifacts", testWorkerImage, [
+            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("copy-artifacts", nightlyImage, [
               "python",
               "-m",
               "kubeflow.testing.prow_artifacts",
