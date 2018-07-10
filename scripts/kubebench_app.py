@@ -18,7 +18,7 @@ MASTER_REPO_NAME = "kubeflow-workflows"
 
 # Configure service account to grant Argo more privileges
 def config_svc_account():
-  cmd = "kubectl create rolebinding default-admin --clusterrole=cluster-admin --serviceaccount=default:default"
+  cmd = "kubectl -n default create rolebinding default-admin --clusterrole=cluster-admin --serviceaccount=default:default"
   util.run(cmd.split())
 
 def get_cluster_info():
@@ -26,7 +26,7 @@ def get_cluster_info():
   util.run(cmd.split())
 
 def get_pods():
-  cmd = "kubectl get pods "
+  cmd = "kubectl get pods -n default"
   util.run(cmd.split())
 
 def copy_job_config():
@@ -43,9 +43,9 @@ def copy_job_config():
     logging.info("nfs server pod NOT found")
     return 0
 
-  cmd = "kubectl exec " + nfs_server_pod + " -- mkdir -p /exports/config"
+  cmd = "kubectl -n default exec " + nfs_server_pod + " -- mkdir -p /exports/config"
   util.run(cmd.split())
-  cmd = "kubectl cp ../config/tf_cnn_benchmarks/job_config.yaml " + nfs_server_pod + ":/exports/config/job-config.yaml"
+  cmd = "kubectl cp ../config/tf_cnn_benchmarks/job_config.yaml default/" + nfs_server_pod + ":/exports/config/job-config.yaml"
   util.run(cmd.split())
 
 def check_kb_job(app):
@@ -60,6 +60,7 @@ def check_kb_job(app):
 
   if(res["status"]["phase"] == "Succeeded"):
     logging.info("Job Completed")
+    return 1
   else:
     logging.info("Job NOT Completed")
     return 0
@@ -159,6 +160,8 @@ if __name__ == "__main__":
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
     util.run(["./cleanup.bash"])
+    util.delete_gcloud_cluster(args.zone, args.name)
+    sys.exit(1)
 
   time.sleep(60)
   get_pods()
@@ -168,6 +171,8 @@ if __name__ == "__main__":
   time.sleep(240)
   ret = check_kb_job(app)
   if not ret:
+    logging.error("One or more test steps failed exiting with non-zero exit "
+                  "code.")
     util.run(["./cleanup.bash"])
     util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
