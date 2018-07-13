@@ -84,40 +84,6 @@ def clone_repo(dest,
 
   return dest
 
-
-'''def create_gcloud_cluster(project, zone):
-  cmd = "gcloud config set project " + project
-  util.run(cmd.split())
-  cmd = "gcloud config set account nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
-  util.run(cmd.split())
-  cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-  util.run(cmd.split())
-  cmd = "gcloud container clusters create nightly --zone "+zone+" --num-nodes=5 --machine-type n1-standard-2"
-  util.run(cmd.split())
-  cmd = "gcloud config set container/cluster nightly"
-  util.run(cmd.split())
-  cmd = "gcloud container clusters get-credentials nightly --zone "+zone
-  util.run(cmd.split())
-  time.sleep(300)
-  cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
-  util.run(cmd.split())
-
-def delete_gcloud_cluster(zone):
-  cmd = "gcloud container clusters delete nightly --zone "+zone+" --quiet"
-  util.run(cmd.split())'''
-
-def check_data_export(project):
-  cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
-  cmd1 = cmd.split()
-  cmd1.append("ls /data/export")
-  util.run(cmd1)
-
-def rm_data_export(project):
-  cmd = "gcloud compute --project "+project+" ssh singlefs-2-vm --zone asia-southeast1-a --command"
-  cmd1 = cmd.split()
-  cmd1.append("sudo rm -rf /data/export")
-  util.run(cmd1)
-
 def get_cluster_info():
   cmd = "kubectl cluster-info"
   util.run(cmd.split())
@@ -239,16 +205,6 @@ def port_forward_start():
       port_forward_pid = int(line.split()[1])
       logging.info(port_forward_pid)
 
-def port_forward_stop():
-  #p = subprocess.Popen(['ps', '-aux'], stdout=subprocess.PIPE)
-  #out, err = p.communicate()
-  #for line in out.splitlines():
-  #  if 'port-forward' in line:
-  #    pid = int(line.split()[1])
-  print(port_forward_pid)
-  #os.kill(port_forward_pid, 9)
-
-
 if __name__ == "__main__":
   logging.basicConfig(level=logging.INFO,
                       format=('%(levelname)s|%(asctime)s'
@@ -304,7 +260,7 @@ if __name__ == "__main__":
   root_logger = logging.getLogger()
 
   timestamp = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
-  test_log = os.path.join(args.logpath, "test-"+timestamp+".log")
+  test_log = os.path.join(args.logpath, args.app+"-test-"+timestamp+".log")
   if not os.path.exists(os.path.dirname(test_log)):
     try:
       os.makedirs(os.path.dirname(test_log))
@@ -337,23 +293,24 @@ if __name__ == "__main__":
   app = args.app
   os.chdir(repo_dir + "/" + app)
   util.run(["ls"])
-  final_result = util.run(["./install.bash"])
-  if not final_result:
+  try :
+    util.run(["./install.bash"])
+    time.sleep(90)
+    get_pods()
+    util.run(["./train.bash"])
+  except subprocess.CalledProcessError as e:
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
     util.run(["./cleanup.bash"])
-
-  time.sleep(90)
-  get_pods()
-  util.run(["./train.bash"])
+    util.delete_gcloud_cluster(args.zone, args.name)
+    sys.exit(1)
   ret = check_train_job(app)
   if not ret:
     util.run(["./cleanup.bash"])
     time.sleep(60)
     util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
-  #check_data_export(args.project)
   util.run(["./serve.bash"])
   time.sleep(60)
   ret = check_serve_status(args.app)
@@ -367,11 +324,5 @@ if __name__ == "__main__":
   mnist_client()
   time.sleep(5)
   util.run(["./cleanup.bash"])
-  time.sleep(60)
-  #rm_data_export(args.project)
-  util.run(["rm","-rf","mnist"])
   util.delete_gcloud_cluster(args.zone, args.name)
-  #os.chdir("../../")
-  #file_handler.flush()
-  #util.run(["gsutil","cp",test_log,"gs://cpsg-ai-test-bucket/nightly_logs/"])
   sys.exit(0)
