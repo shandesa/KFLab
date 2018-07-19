@@ -10,7 +10,7 @@ APP_NAME=mnist
 KUBEFLOW_GITHUB_VERSION=v0.2.0-rc.0
 
 ## GITHUB version for ciscoai components
-CISCOAI_GITHUB_VERSION=master
+CISCOAI_GITHUB_VERSION=7a6523d85cce3fbea93c43e1b2b344cc1609f9a6
 
 ## Ksonnet environment name
 KF_ENV=nativek8s
