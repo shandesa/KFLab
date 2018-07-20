@@ -19,8 +19,9 @@ export GITHUB_TOKEN=${YOUR_GITHUB_TOKEN}
 
 ```
 git clone https://github.com/CiscoAI/kubeflow-workflows.git
-cd kubeflow-workflows/tf-mnist/demo
+cd kubeflow-workflows
 git checkout -b local-demo origin/local-demo
+cd tf-mnist/demo
 ```
 
 ## Installation

@@ -4,6 +4,7 @@
 source variables.bash
 
 #2. Find model IP
+cd ${APP_NAME}
 MNIST_SERVING_IP=`kubectl -n ${NAMESPACE} get svc/mnist --output=jsonpath={.spec.clusterIP}`
    echo "MNIST_SERVING_IP is ${MNIST_SERVING_IP}"
 
