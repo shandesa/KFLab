@@ -1,8 +1,10 @@
 # Overview of the application
 This tutorial contains instructions to build an **end to end kubeflow app** on a
-native Kubernetes cluster(non-cloud) with minimal prerequisites.  The mnist
-model is trained and served from a NFS mount.  This example is intended for
-beginners with zero/minimal experience in kubeflow.
+Kubernetes cluster running on Google Kubernetes Engine (GKE) with minimal prerequisites.
+*It should work on any other K8s cluster as well.*
+The mnist model is trained and served from an NFS mount.
+**This example is intended for
+beginners with zero/minimal experience in kubeflow.**
 
 This tutorial demonstrates:
 
