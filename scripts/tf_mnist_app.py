@@ -286,7 +286,7 @@ if __name__ == "__main__":
     # Exit with a non-zero exit code by to signal failure to prow.
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
-  util.create_gcloud_cluster(args.project, args.zone, args.name)
+  util.set_kube_config(args.project, args.zone, args.name)
   get_cluster_info()
   logging.info(args)
   #repo_dir = clone_repo("nightly_repo")
@@ -303,26 +303,20 @@ if __name__ == "__main__":
     logging.error("One or more test steps failed exiting with non-zero exit "
                   "code.")
     util.run(["./cleanup.bash"])
-    util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
   ret = check_train_job(args.app)
   if not ret:
     util.run(["./cleanup.bash"])
-    time.sleep(60)
-    util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
   util.run(["./serve.bash"])
   time.sleep(60)
   ret = check_serve_status(args.app)
   if not ret:
     util.run(["./cleanup.bash"])
-    time.sleep(60)
-    util.delete_gcloud_cluster(args.zone, args.name)
     sys.exit(1)
   port_forward_start()
   time.sleep(5)
   mnist_client()
   time.sleep(5)
   util.run(["./cleanup.bash"])
-  util.delete_gcloud_cluster(args.zone, args.name)
   sys.exit(0)

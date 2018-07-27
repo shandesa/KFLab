@@ -69,6 +69,7 @@
 
       // The namespace on the cluster we spin up to deploy into.
       local deployNamespace = "default";
+      local clusterName = "kubebench";
       // The directory within the kubeflow_testing submodule containing
       // py scripts to use.
       local k8sPy = srcDir;
@@ -206,6 +207,12 @@
                 }],
                 [
                   {
+                    name: "create-cluster",
+                    template: "create-cluster",
+                  },
+                ],
+                [
+                  {
                     name: "run-tests",
                     template: "run-tests",
                   },
@@ -215,6 +222,12 @@
             {
               name: "exit-handler",
               steps: [
+                [
+                  {
+                    name: "delete-cluster",
+                    template: "delete-cluster",
+                  },
+                ],
                 [{
                   name: "copy-artifacts",
                   template: "copy-artifacts",
@@ -245,6 +258,14 @@
                 ],
               },
             },  // checkout
+            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("create-cluster", nightlyImage, [
+              "python",
+	      "scripts/create_cluster.py",
+              "--project=" + project,
+              "--zone=" + zone,
+              "--name=" + clusterName,
+              "--logpath=" + outputDir,
+            ]),  // create cluster 
             $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("run-tests", nightlyImage, [
               "python",
 	      "scripts/kubebench_app.py",
@@ -253,6 +274,14 @@
               "--repo=" + srcDir,
               "--logpath=" + outputDir,
             ]),  // run tests
+            $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("delete-cluster", nightlyImage, [
+              "python",
+	      "scripts/delete_cluster.py",
+              "--project=" + project,
+              "--zone=" + zone,
+              "--name=" + clusterName,
+              "--logpath=" + outputDir,
+            ]),  // delete cluster 
             $.parts(namespace, name).e2e(prow_env, bucket).buildTemplate("create-pr-symlink", nightlyImage, [
               "python",
               "-m",

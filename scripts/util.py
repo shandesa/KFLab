@@ -75,6 +75,18 @@ def delete_gcloud_cluster(zone, name):
   cmd = "gcloud container clusters delete " + name + " --zone "+zone+" --quiet"
   run(cmd.split())
 
+def set_kube_config(project, zone, name):
+  cmd = "gcloud config set project " + project
+  run(cmd.split())
+  cmd = "gcloud config set account nightlycpsg@cpsg-ai-test.iam.gserviceaccount.com"
+  run(cmd.split())
+  cmd = "gcloud auth activate-service-account --key-file=" + os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+  run(cmd.split())
+  cmd = "gcloud config set container/cluster " + name
+  run(cmd.split())
+  cmd = "gcloud container clusters get-credentials " + name + " --zone "+zone
+  run(cmd.split())
+
 def get_cluster_info():
   cmd = "kubectl cluster-info"
   run(cmd.split())
