@@ -16,4 +16,4 @@ source variables.bash
 
 # Port forward to access the serving port locally
 SERVING_POD_NAME=`kubectl -n ${NAMESPACE} get pod -l=app=mnist -o jsonpath='{.items[0].metadata.name}'`
-kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} 9000:9000
+kubectl -n ${NAMESPACE} port-forward ${SERVING_POD_NAME} ${PORT}:9000

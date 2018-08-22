@@ -32,3 +32,14 @@ DOCKER_BASE_URL=gcr.io/cpsg-ai-demo
 IMAGE=${DOCKER_BASE_URL}/tf-mnist-demo:v1
 #docker build . --no-cache  -f Dockerfile -t ${IMAGE}
 #docker push ${IMAGE}
+
+# Used in portf.bash and webapp.bash
+# If using without an application, source this file before using
+PORT=9000
+export TF_MODEL_SERVER_PORT=${PORT}
+
+# Used in webapp.bash
+DOCKER_HUB=gcr.io
+DOCKER_USERNAME=cpsg-ai-demo
+DOCKER_IMAGE=mnist-client
+WEBAPP_FOLDER=webapp
