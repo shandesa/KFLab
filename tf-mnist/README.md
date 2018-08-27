@@ -42,9 +42,9 @@ logical GKE cluster where the `train` and `serve` stages run) connects with the
 
    Check if kubectl  is configured properly by accessing the cluster Info of your kubernetes cluster
 
-       $kubectl cluster-info
+        $ kubectl cluster-info
 
- 2. **Ksonnet**
+2. **ksonnet**
 
     Check ksonnet version
 
@@ -64,7 +64,7 @@ If above commands succeeds, you are good to go !
         kubectl get pods -n kubeflow
 
 If there is any rate limit error from github, please follow the instructions at:
-https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
+[Github Token Setup](https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors)
 
 
 # Setup
@@ -74,11 +74,13 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
    Point `DOCKER_BASE_URL` to your DockerHub account. Point `IMAGE` to your training image. If you don't have a DockerHub account,
    create one at [https://hub.docker.com/](https://hub.docker.com/), upload your image there, and do the following
    (replace <username> and <container> with appropriate values).
-
+   
+       ```
        DOCKER_BASE_URL=docker.io/<username>
        IMAGE=${DOCKER_BASE_URL}/<image>
        docker build . --no-cache  -f Dockerfile -t ${IMAGE}
        docker push ${IMAGE}
+       ```
        
 > **NOTE.** Images kept in gcr.io might make things faster since it keeps images within GKE, thus avoiding delays of accessing the image
 > from a remote container registry.
@@ -86,14 +88,17 @@ https://ksonnet.io/docs/tutorial#troubleshooting-github-rate-limiting-errors.
 
 2. Run the training job setup script
 
-       ./train.bash
-
+       ```
+	   ./train.bash
        # Ensure that all pods are running in the namespace set in variables.bash. The default namespace is kubeflow
        kubectl get pods -n kubeflow
+       ```
 
 3. Start TF serving on the trained results
 
+       ```
        ./serve.bash
+       ```
 
 # Model Testing
 
@@ -117,6 +122,7 @@ The model can be tested using a local python client or via web application
        pip install --upgrade tensorflow
        pip install tensorflow-serving-api
        pip install python-mnist
+       pip install Pillow
 
        TF_MNIST_IMAGE_PATH=data/7.png python mnist_client.py
 
@@ -127,6 +133,7 @@ The model can be tested using a local python client or via web application
  Now try a different image in `data` directory :)
 
 ## Using a web application
+### LoadBalancer
 
  This is ideal if you would like to create a test web application exposed by a loadbalancer. 
 
@@ -142,7 +149,7 @@ The model can be tested using a local python client or via web application
       echo "CLIENT_IMAGE is ${CLIENT_IMAGE}"
       ks generate tf-mnist-client tf-mnist-client --mnist_serving_ip=${MNIST_SERVING_IP} --image=${CLIENT_IMAGE}
 
-      ks apply {KF_ENV} -c tf-mnist-client
+      ks apply ${KF_ENV} -c tf-mnist-client
       
       #Ensure that all pods are running in the namespace set in variables.bash. 
       kubectl get pods -n ${NAMESPACE}
@@ -153,10 +160,19 @@ The model can be tested using a local python client or via web application
 
   Open browser and see app at http://LoadBalancerIP 
   
+### NodePort
+
+ Another way to expose your web application on the Internet is NodePort. Define variables in variables.bash and run the following script: 
+ 
+ ```
+   ./webapp.bash
+ ```
   
-  # Extras
+  After running this script, you will get the IP adress of your web application. Open browser and see app at http://IP_ADRESS:NodePort
   
-  ## Using Persistent Volumes
+# Extras
+  
+## Using Persistent Volumes
        
 Currently, this example uses a [NFS server](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L53) that is automatically deployed in your Kubernetes cluster. If you have an external NFS server, you can provide its IP during the nfs-volume deployment. See [nfs-volume deployment](https://github.com/CiscoAI/kubeflow-workflows/blob/d6d002f674c2201ec449ebd1e1d28fb335a64d1e/mnist/install.bash#L61) step.
 
