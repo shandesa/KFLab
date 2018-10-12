@@ -43,3 +43,4 @@ DOCKER_HUB=gcr.io
 DOCKER_USERNAME=cpsg-ai-demo
 DOCKER_IMAGE=mnist-client
 WEBAPP_FOLDER=webapp
+
