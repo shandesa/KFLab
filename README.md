@@ -1,4 +1,4 @@
-# Kubeflow workflows
+# Kubeflow Workflows
 
 <img src="https://www.kubeflow.org/images/logo.svg" width="100">
 
