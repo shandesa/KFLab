@@ -1,7 +1,7 @@
 workflows:
-  - app_dir: CiscoAI/kubeflow-workflows/test/workflows
-    component: tf_mnist 
+  - app_dir: CiscoAI/KFLab/test/workflows
+    component: tf_mnist
     name: e2e
-  - app_dir: CiscoAI/kubeflow-workflows/test/workflows
+  - app_dir: CiscoAI/KFLab/test/workflows
     component: kubebench
     name: kb-e2e
