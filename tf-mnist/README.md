@@ -221,3 +221,11 @@ step.
          ks delete ${KF_ENV} -c ${JOB}
          ks apply ${KF_ENV} -c ${JOB}
 
+## cleanup the PODS
+
+	./cleanup.bash
+
+	- Cleans up the pods, trained model and gets the state to bare cluster
+
+	- To force cleanup a particular pod immediately, issue the command:
+	`kubectl delete pod <pod_name> --force -n kubeflow --grace-period=0`
